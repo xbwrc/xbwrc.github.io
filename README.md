@@ -72,56 +72,6 @@ const ACTIVITIES = [
 
 ---
 
-## 部署到 GitHub Pages
-
-### 方法一：通过 GitHub 网页界面（推荐新手）
-
-1. 登录 [GitHub](https://github.com)，点击右上角 **「+」→「New repository」**
-2. 仓库名填写（例如）`xbwrun`，设置为 **Public**，点击 **Create repository**
-3. 将 `xbwrun-site/` 目录下的所有文件上传到仓库根目录
-4. 进入仓库 **Settings → Pages**
-5. Source 选择 **Deploy from a branch**，Branch 选 `main`，目录选 `/ (root)`
-6. 点击 **Save**，等待约 1-2 分钟
-7. 访问 `https://你的用户名.github.io/xbwrun/` 即可
-
-### 方法二：通过 Git 命令行
-
-```bash
-# 1. 在 xbwrun-site/ 目录下初始化 Git
-cd xbwrun-site
-git init
-git add .
-git commit -m "初始化西北旺跑步大本营网站"
-
-# 2. 关联 GitHub 远程仓库（替换为你的仓库地址）
-git remote add origin https://github.com/你的用户名/xbwrun.git
-git branch -M main
-git push -u origin main
-
-# 3. 开启 GitHub Pages（在 GitHub 网页 Settings → Pages 中设置）
-```
-
-### 自定义域名（可选）
-
-如果有自己的域名（如 `xbwrun.cn`），在仓库根目录创建 `CNAME` 文件，写入域名：
-
-```
-xbwrun.cn
-```
-
-然后在域名提供商处添加 CNAME 记录指向 `你的用户名.github.io`。
-
----
-
-## 技术说明
-
-- **纯静态**：HTML + CSS + 原生 JavaScript，无需任何构建工具或框架
-- **数据驱动**：大事记和活动数据通过 `data/*.js` 外部文件管理，方便非技术人员更新
-- **响应式**：完整支持手机/平板/桌面，768px 断点自适应
-- **滚动动画**：使用 IntersectionObserver 实现元素入场动画
-- **字体**：Outfit（英文/数字）+ Noto Sans SC（中文），通过 Google Fonts CDN 加载
-
----
 
 ## 联系
 
