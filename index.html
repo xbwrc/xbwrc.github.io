@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>西北旺跑步大本营 - 北京·西北旺·公益跑团</title>
+  <meta name="description" content="西北旺镇团委公益跑团，专业教练带队，科学训练，公益免费，欢迎加入！" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --pink: #E879A8;
+      --pink-light: #F9A8C9;
+      --pink-soft: #FDE4EF;
+      --blue: #38BDF8;
+      --blue-deep: #0EA5E9;
+      --blue-light: #7DD3FC;
+      --blue-soft: #E0F2FE;
+      --purple: #A855F7;
+      --white: #FFFFFF;
+      --bg: #FDFCFF;
+      --text: #1E1B3A;
+      --text-light: #6B6494;
+      --text-muted: #9C97B8;
+      --gradient: linear-gradient(135deg, var(--pink) 0%, var(--purple) 40%, var(--blue) 100%);
+      --gradient-soft: linear-gradient(135deg, var(--pink-soft) 0%, #F0E6FF 40%, var(--blue-soft) 100%);
+      --gradient-h: linear-gradient(90deg, var(--pink) 0%, var(--blue) 100%);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-lg: 24px;
+      --shadow: 0 4px 24px rgba(168,85,247,0.10);
+      --shadow-lg: 0 8px 40px rgba(168,85,247,0.18);
+      --glass: rgba(255,255,255,0.72);
+      --glass-border: rgba(255,255,255,0.9);
+      --nav-h: 68px;
+    }
+    /* ===== RESET ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    /* ===== UTILITIES ===== */
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+    .gradient-text {
+      background: var(--gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .glass-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 12px 28px; border-radius: 50px;
+      font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      border: none; transition: all 0.25s ease;
+    }
+    .btn-gradient {
+      background: var(--gradient); color: #fff;
+      box-shadow: 0 4px 20px rgba(232,121,168,0.4);
+    }
+    .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(232,121,168,0.5); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1.5px solid rgba(168,85,247,0.3);
+    }
+    .btn-outline:hover { background: rgba(168,85,247,0.06); border-color: var(--purple); }
+    .section-title { font-size: clamp(26px,4vw,38px); font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
+    .section-subtitle { font-size: 16px; color: var(--text-light); max-width: 520px; }
+    .tag-pill {
+      display: inline-flex; align-items: center;
+      padding: 4px 14px; border-radius: 50px; font-size: 12px; font-weight: 600;
+      background: var(--gradient-soft); color: var(--purple);
+      border: 1px solid rgba(168,85,247,0.2);
+    }
+    /* scroll reveal */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+    .reveal-d5 { transition-delay: 0.5s; }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: rgba(253,252,255,0.82); backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(168,85,247,0.1);
+      transition: box-shadow 0.3s;
+    }
+    .navbar.scrolled { box-shadow: 0 2px 20px rgba(168,85,247,0.12); }
+    .navbar .container { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
+    .nav-logo-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 15px; font-weight: 800; letter-spacing: -0.5px;
+      box-shadow: 0 4px 12px rgba(232,121,168,0.4);
+      flex-shrink: 0;
+    }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-links a {
+      padding: 7px 14px; border-radius: 8px; font-size: 14px; font-weight: 500;
+      color: var(--text-light); transition: all 0.2s;
+    }
+    .nav-links a:hover { background: rgba(168,85,247,0.08); color: var(--purple); }
+    .nav-cta { margin-left: 8px; }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 6px; background: none; border: none;
+    }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+    .mobile-menu {
+      display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
+      background: rgba(253,252,255,0.97); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(168,85,247,0.1);
+      padding: 16px 24px 24px; z-index: 99;
+      flex-direction: column; gap: 4px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { padding: 12px 16px; border-radius: 10px; font-size: 15px; font-weight: 500; color: var(--text-light); transition: all 0.2s; }
+    .mobile-menu a:hover { background: rgba(168,85,247,0.08); color: var(--purple); }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 47vh; padding: calc(var(--nav-h) + 60px) 0 0;
+      position: relative; overflow: hidden;
+      background: var(--gradient-soft);
+    }
+    .hero-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+      pointer-events: none; animation: orbFloat 8s ease-in-out infinite;
+    }
+    .orb-1 { width: 400px; height: 400px; background: var(--pink-light); opacity: 0.4; top: 10%; left: 5%; animation-delay: 0s; }
+    .orb-2 { width: 500px; height: 500px; background: var(--blue-light); opacity: 0.4; bottom: 10%; right: 5%; animation-delay: -4s; }
+    .orb-3 { width: 300px; height: 300px; background: var(--purple); opacity: 0.2; top: 40%; right: 30%; animation-delay: -2s; }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0); }
+      33% { transform: translate(20px, -20px); }
+      66% { transform: translate(-10px, 10px); }
+    }
+    /* ===== Hero Entrance Animations ===== */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-badge  { animation: fadeUp 0.8s ease-out 0s   both; }
+    .hero-title  { animation: fadeUp 0.8s ease-out 0.1s both; }
+    .hero-desc   { animation: fadeUp 0.8s ease-out 0.2s both; }
+    .hero-btns   { animation: fadeUp 0.8s ease-out 0.3s both; }
+    .hero-right  { animation: fadeUp 0.8s ease-out 0.4s both; }
+    /* stat card hover */
+    .stat-card { transition: all 0.3s; }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(168,85,247,0.12); background: rgba(255,255,255,0.92) !important; }
+    .hero .container {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: center; position: relative; z-index: 2;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 50px; margin-bottom: 24px;
+      background: rgba(255,255,255,0.8); border: 1px solid rgba(232,121,168,0.3);
+      font-size: 13px; font-weight: 600; color: var(--pink);
+      backdrop-filter: blur(8px);
+    }
+    .hero-title { font-size: clamp(38px,6vw,66px); font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
+    .hero-desc { font-size: 16px; color: var(--text-light); line-height: 1.8; margin-bottom: 32px; max-width: 460px; }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .stat-card { padding: 20px 22px; text-align: center; }
+    .stat-icon { font-size: 28px; margin-bottom: 8px; }
+    .stat-num {
+      font-size: 28px; font-weight: 800; line-height: 1;
+      background: var(--gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .stat-label { font-size: 13px; color: var(--text-light); margin-top: 4px; font-weight: 500; }
+    .hero-wave { position: relative; margin-top: 60px; line-height: 0; }
+    .hero-wave svg { width: 100%; display: block; }
+
+    /* ===== ABOUT ===== */
+    .about { padding: 88px 0; background: var(--white); }
+    .about .container { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .about-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 24px; }
+    .about-desc { font-size: 15px; color: var(--text-light); line-height: 1.85; }
+    .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .feature-card {
+      padding: 20px; border-radius: var(--radius-sm);
+      border: 1px solid rgba(168,85,247,0.1); transition: all 0.25s;
+    }
+    .feature-card:hover { border-color: var(--purple); box-shadow: var(--shadow); transform: translateY(-4px); }
+    .feature-icon { font-size: 28px; margin-bottom: 10px; }
+    .feature-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+    .feature-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ===== PROGRAMS ===== */
+    .programs { padding: 88px 0; background: var(--gradient-soft); }
+    .programs-header { text-align: center; margin-bottom: 52px; }
+    .programs-header .section-subtitle { margin: 12px auto 0; }
+    .programs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .program-card { padding: 28px 24px; border-radius: var(--radius); transition: all 0.3s; }
+    .program-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .program-emoji { font-size: 36px; margin-bottom: 14px; }
+    .program-name { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .program-desc { font-size: 13px; color: var(--text-light); line-height: 1.7; }
+
+    /* ===== SCHEDULE ===== */
+    .schedule { padding: 88px 0; background: var(--white); }
+    .schedule .container { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .schedule-list { display: flex; flex-direction: column; gap: 14px; margin-top: 32px; }
+    .schedule-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 20px 22px; border-radius: var(--radius-sm);
+      border: 1px solid rgba(168,85,247,0.1); transition: all 0.25s;
+    }
+    .schedule-item:hover { border-color: rgba(168,85,247,0.15); transform: translateX(4px); box-shadow: 0 8px 30px rgba(168,85,247,0.08); }
+    .schedule-item-icon { font-size: 24px; flex-shrink: 0; margin-top: 1px; }
+    .schedule-item-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .schedule-item-time { font-size: 13px; color: var(--text-muted); }
+    .schedule-visual {
+      background: var(--gradient-soft); border-radius: var(--radius-lg);
+      padding: 40px 32px; text-align: center; margin-top: 28px;
+    }
+    .schedule-visual-emoji { font-size: 72px; margin-bottom: 18px; display: block; }
+    .schedule-visual-text { font-size: 15px; color: var(--text-light); line-height: 1.75; }
+
+    /* ===== EVENTS / TIMELINE ===== */
+    .events-section { padding: 88px 0; background: var(--gradient-soft); }
+    .events-header { text-align: center; margin-bottom: 56px; }
+    .events-header .section-subtitle { margin: 12px auto 0; }
+    .timeline { position: relative; max-width: 720px; margin: 0 auto; padding-left: 56px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 20px; top: 8px; bottom: 8px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--pink), var(--purple), var(--blue));
+      border-radius: 2px;
+    }
+    .timeline-item { position: relative; margin-bottom: 32px; }
+    .timeline-dot {
+      position: absolute; left: -46px; top: 10px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: white; border: 3px solid var(--purple);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; z-index: 1;
+      box-shadow: 0 0 0 4px rgba(168,85,247,0.12);
+    }
+    .timeline-card { padding: 20px 24px; border-radius: var(--radius); }
+    .timeline-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .timeline-date { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .timeline-tag { }
+    .timeline-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .timeline-desc { font-size: 14px; color: var(--text-light); line-height: 1.65; }
+
+    /* ===== ACTIVITIES ===== */
+    .activities-section { padding: 88px 0; background: var(--white); }
+    .activities-header { text-align: center; margin-bottom: 52px; }
+    .activities-header .section-subtitle { margin: 12px auto 0; }
+    .activities-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .activity-card {
+      padding: 24px; border-radius: var(--radius);
+      border: 1px solid rgba(168,85,247,0.1); transition: all 0.25s;
+    }
+    .activity-card:hover { border-color: var(--purple); box-shadow: var(--shadow); transform: translateY(-3px); }
+    .activity-emoji { font-size: 32px; margin-bottom: 12px; }
+    .activity-date { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; }
+    .activity-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .activity-desc { font-size: 13px; color: var(--text-light); line-height: 1.65; }
+
+    /* ===== JOIN ===== */
+    .join-section { padding: 88px 0; background: var(--gradient-soft); }
+    .join-card { max-width: 680px; margin: 0 auto; padding: 52px 44px; text-align: center; border-radius: var(--radius-lg); }
+    .join-badge { margin-bottom: 20px; }
+    .join-title { font-size: clamp(24px,4vw,34px); font-weight: 800; margin-bottom: 12px; }
+    .join-desc { font-size: 15px; color: var(--text-light); margin-bottom: 40px; line-height: 1.7; }
+    .join-steps { display: flex; justify-content: center; align-items: flex-start; gap: 0; margin-bottom: 40px; }
+    .join-step { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0 20px; }
+    .join-step-num {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 15px; font-weight: 700;
+      box-shadow: 0 4px 12px rgba(168,85,247,0.3);
+    }
+    .join-step-text { font-size: 13px; font-weight: 600; color: var(--text); text-align: center; max-width: 80px; line-height: 1.4; }
+    .join-arrow { font-size: 22px; color: var(--text-muted); padding: 0 4px; margin-top: 10px; }
+    .join-wechat-label { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
+    .join-wechat {
+      font-size: 32px; font-weight: 800; margin-bottom: 32px;
+      background: var(--gradient-h);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ===== FOOTER ===== */
+    footer { background: var(--text); color: rgba(255,255,255,0.6); padding: 52px 0 28px; }
+    .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .footer-logo-icon {
+      width: 36px; height: 36px; border-radius: 8px; background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 800; flex-shrink: 0;
+    }
+    .footer-logo-name { font-size: 16px; font-weight: 700; color: white; }
+    .footer-brand-desc { font-size: 13px; line-height: 1.75; color: rgba(255,255,255,0.45); max-width: 280px; }
+    .footer-col-title { font-size: 14px; font-weight: 700; color: white; margin-bottom: 16px; }
+    .footer-links { display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 13px; color: rgba(255,255,255,0.45); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--pink-light); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 22px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.3); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .hero .container { grid-template-columns: 1fr; text-align: center; }
+      .hero-desc { margin-left: auto; margin-right: auto; }
+      .hero-btns { justify-content: center; }
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .about .container { grid-template-columns: 1fr; gap: 40px; }
+      .about-features { grid-template-columns: 1fr 1fr; }
+      .programs-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+      .schedule .container { grid-template-columns: 1fr; gap: 0; }
+      .activities-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+      .join-card { padding: 36px 20px; }
+      .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 480px) {
+      .programs-grid { grid-template-columns: 1fr; }
+      .about-features { grid-template-columns: 1fr; }
+      .activities-grid { grid-template-columns: 1fr; }
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .join-steps { flex-direction: column; align-items: center; gap: 16px; }
+      .join-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <a href="#hero" class="nav-logo">
+      <div class="nav-logo-icon" id="logoIcon">XR</div>
+      <span id="logoName">西北旺跑步大本营</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">关于我们</a></li>
+      <li><a href="#programs">训练项目</a></li>
+      <li><a href="#schedule">训练安排</a></li>
+      <li><a href="#events">大事记</a></li>
+      <li><a href="#activities">日常活动</a></li>
+    </ul>
+    <a href="#join" class="btn btn-gradient nav-cta">加入跑团</a>
+    <button class="hamburger" id="hamburger" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobile()">关于我们</a>
+  <a href="#programs" onclick="closeMobile()">训练项目</a>
+  <a href="#schedule" onclick="closeMobile()">训练安排</a>
+  <a href="#events" onclick="closeMobile()">大事记</a>
+  <a href="#activities" onclick="closeMobile()">日常活动</a>
+  <a href="#join" onclick="closeMobile()" style="margin-top:10px;text-align:center;background:var(--gradient);color:white;font-weight:700;border-radius:50px;padding:12px 28px;">加入跑团</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-orb orb-3"></div>
+  <div class="container">
+    <div class="hero-left">
+      <div class="hero-badge">📍 北京·西北旺·公益跑团</div>
+      <h1 class="hero-title">
+        每一步<br>都是<span class="gradient-text">更好的自己</span>
+      </h1>
+      <p class="hero-desc">
+        西北旺镇团委公益跑团，由中国田协认证教练员带队，提供专业、科学、免费的跑步训练课程。无论你是跑步新手还是资深跑者，这里都有你的位置。
+      </p>
+      <div class="hero-btns">
+        <a href="#join" class="btn btn-gradient">🏃 加入我们</a>
+        <a href="#about" class="btn btn-outline">了解更多 →</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stats" id="heroStats">
+        <!-- rendered by JS from SITE.stats -->
+      </div>
+    </div>
+  </div>
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#FFFFFF"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-left reveal">
+      <span class="tag-pill">关于我们</span>
+      <h2 class="section-title" style="margin-top:18px;">跑出健康<br><span class="gradient-text">跑出未来</span></h2>
+      <div class="about-tags">
+        <span class="tag-pill">🏅 田协认证教练</span>
+        <span class="tag-pill">💚 完全公益免费</span>
+        <span class="tag-pill">🏃 每周两次训练</span>
+        <span class="tag-pill">👥 50+ 活跃成员</span>
+      </div>
+      <p class="about-desc">
+        西北旺跑步大本营由西北旺镇团委发起，是一支扎根社区、服务青年的公益跑团。我们相信每个人都有跑步的潜力，用科学的方法、专业的指导，帮助每一位跑者突破自我，享受奔跑的乐趣。
+      </p>
+    </div>
+    <div class="about-right">
+      <div class="about-features">
+        <div class="feature-card reveal reveal-d1">
+          <div class="feature-icon">🏅</div>
+          <div class="feature-title">专业教练</div>
+          <div class="feature-desc">中国田径协会认证教练员全程带队，科学规划每一次训练</div>
+        </div>
+        <div class="feature-card reveal reveal-d2">
+          <div class="feature-icon">💚</div>
+          <div class="feature-title">公益跑团</div>
+          <div class="feature-desc">完全免费，无隐性收费，让每个人都能享受专业跑步训练</div>
+        </div>
+        <div class="feature-card reveal reveal-d3">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">科学训练</div>
+          <div class="feature-desc">基于运动科学的训练体系，循序渐进，降低受伤风险</div>
+        </div>
+        <div class="feature-card reveal reveal-d4">
+          <div class="feature-icon">🤝</div>
+          <div class="feature-title">温暖社区</div>
+          <div class="feature-desc">充满活力的跑步社群，互相鼓励，共同成长，结伴前行</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROGRAMS ===== -->
+<section class="programs" id="programs">
+  <div class="container">
+    <div class="programs-header reveal">
+      <span class="tag-pill">训练项目</span>
+      <h2 class="section-title" style="margin-top:18px;">六大<span class="gradient-text">专项课程</span></h2>
+      <p class="section-subtitle">覆盖跑步全周期需求，从技术到体能，从康复到专项，全面提升</p>
+    </div>
+    <div class="programs-grid">
+      <div class="program-card glass-card reveal reveal-d1">
+        <div class="program-emoji">👟</div>
+        <div class="program-name">跑步技术</div>
+        <div class="program-desc">专注跑姿矫正与步频步幅优化，掌握高效跑步技术，提升经济性</div>
+      </div>
+      <div class="program-card glass-card reveal reveal-d2">
+        <div class="program-emoji">💪</div>
+        <div class="program-name">力量训练</div>
+        <div class="program-desc">跑者专项力量体系，核心稳定性、髋部力量、下肢力量全面强化</div>
+      </div>
+      <div class="program-card glass-card reveal reveal-d3">
+        <div class="program-emoji">🩹</div>
+        <div class="program-name">伤病康复</div>
+        <div class="program-desc">常见跑步损伤预防与康复指导，让你跑得更持久、更健康</div>
+      </div>
+      <div class="program-card glass-card reveal reveal-d4">
+        <div class="program-emoji">🐢</div>
+        <div class="program-name">超慢跑</div>
+        <div class="program-desc">低强度有氧基础训练，燃脂提升耐力，适合初学者与恢复期跑者</div>
+      </div>
+      <div class="program-card glass-card reveal reveal-d5">
+        <div class="program-emoji">⛺</div>
+        <div class="program-name">冬训夏训</div>
+        <div class="program-desc">针对不同季节特点的专项集训，突破平台期，全年保持训练状态</div>
+      </div>
+      <div class="program-card glass-card reveal" style="transition-delay:0.6s">
+        <div class="program-emoji">👶</div>
+        <div class="program-name">亲子体能</div>
+        <div class="program-desc">面向6-12岁儿童的趣味体能课程，在快乐中培养运动习惯与体能基础</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCHEDULE ===== -->
+<section class="schedule" id="schedule">
+  <div class="container">
+    <div class="schedule-left">
+      <span class="tag-pill reveal">训练安排</span>
+      <h2 class="section-title reveal" style="margin-top:18px;">规律训练<br><span class="gradient-text">坚持就是胜利</span></h2>
+      <div class="schedule-list" id="scheduleList">
+        <div class="schedule-item reveal reveal-d1">
+          <div class="schedule-item-icon">⚡</div>
+          <div>
+            <div class="schedule-item-title">周三速度训练</div>
+            <div class="schedule-item-time">每周三 19:00 - 20:30 · 间歇跑 / 节奏跑 / 速度提升</div>
+          </div>
+        </div>
+        <div class="schedule-item reveal reveal-d2">
+          <div class="schedule-item-icon">🏃</div>
+          <div>
+            <div class="schedule-item-title">周六长距离</div>
+            <div class="schedule-item-time">每周六 07:00 - 09:00 · LSD 有氧耐力 / 10-20km</div>
+          </div>
+        </div>
+        <div class="schedule-item reveal reveal-d3">
+          <div class="schedule-item-icon">❄️</div>
+          <div>
+            <div class="schedule-item-title">冬季集训营</div>
+            <div class="schedule-item-time">12月 - 次年2月 · 8周强化训练，突破冬季瓶颈</div>
+          </div>
+        </div>
+        <div class="schedule-item reveal reveal-d4">
+          <div class="schedule-item-icon">☀️</div>
+          <div>
+            <div class="schedule-item-title">夏季集训营</div>
+            <div class="schedule-item-time">7月 - 8月 · 清晨早训，科学应对夏季高温</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="schedule-right reveal">
+      <div class="schedule-visual">
+        <span class="schedule-visual-emoji">🏃‍♂️</span>
+        <p class="schedule-visual-text">
+          每周两次常规训练<br>每季度一次主题集训<br>全年不间断，陪你每一步成长
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EVENTS / TIMELINE ===== -->
+<section class="events-section" id="events">
+  <div class="container">
+    <div class="events-header reveal">
+      <span class="tag-pill">大事记</span>
+      <h2 class="section-title" style="margin-top:18px;">我们的<span class="gradient-text">成长足迹</span></h2>
+      <p class="section-subtitle">每一个里程碑都是跑团历史的见证</p>
+    </div>
+    <div class="timeline" id="timeline">
+      <!-- rendered by JS from EVENTS -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== ACTIVITIES ===== -->
+<section class="activities-section" id="activities">
+  <div class="container">
+    <div class="activities-header reveal">
+      <span class="tag-pill">日常活动</span>
+      <h2 class="section-title" style="margin-top:18px;">近期<span class="gradient-text">训练记录</span></h2>
+      <p class="section-subtitle">每一次训练都在记录，每一步都有意义</p>
+    </div>
+    <div class="activities-grid" id="activitiesGrid">
+      <!-- rendered by JS from ACTIVITIES -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== JOIN ===== -->
+<section class="join-section" id="join">
+  <div class="container">
+    <div class="join-card glass-card reveal">
+      <div class="join-badge"><span class="tag-pill">加入跑团</span></div>
+      <h2 class="join-title">三步开启<br><span class="gradient-text">奔跑之旅</span></h2>
+      <p class="join-desc">公益免费，专业教练，温暖社群。现在加入，和 50+ 位跑者一起奔跑。</p>
+      <div class="join-steps">
+        <div class="join-step">
+          <div class="join-step-num">1</div>
+          <div class="join-step-text">添加微信<br>xbwrun</div>
+        </div>
+        <div class="join-arrow">→</div>
+        <div class="join-step">
+          <div class="join-step-num">2</div>
+          <div class="join-step-text">入群了解<br>训练详情</div>
+        </div>
+        <div class="join-arrow">→</div>
+        <div class="join-step">
+          <div class="join-step-num">3</div>
+          <div class="join-step-text">参加训练<br>开始奔跑</div>
+        </div>
+      </div>
+      <div class="join-wechat-label">微信号</div>
+      <div class="join-wechat" id="joinWechat">xbwrun</div>
+      <a href="#" class="btn btn-gradient" onclick="alert('请通过微信搜索：xbwrun 加入跑团！'); return false;">🏃 立即加入</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">
+          <div class="footer-logo-icon" id="footerLogoIcon">XR</div>
+          <span class="footer-logo-name" id="footerLogoName">西北旺跑步大本营</span>
+        </div>
+        <p class="footer-brand-desc">
+          西北旺镇团委公益跑团，由中国田协认证教练员带队，提供专业、科学、免费的跑步训练课程，服务西北旺社区青年。
+        </p>
+      </div>
+      <div>
+        <div class="footer-col-title">快速导航</div>
+        <div class="footer-links">
+          <a href="#about">关于我们</a>
+          <a href="#programs">训练项目</a>
+          <a href="#schedule">训练安排</a>
+          <a href="#events">大事记</a>
+          <a href="#activities">日常活动</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">联系我们</div>
+        <div class="footer-links">
+          <a href="#">微信：xbwrun</a>
+          <a href="#">北京·西北旺</a>
+          <a href="#join">加入跑团</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 西北旺跑步大本营 · 西北旺镇团委公益跑团 · Made with ❤️ and 🏃
+    </div>
+  </div>
+</footer>
+
+<!-- ===== DATA SCRIPTS ===== -->
+<script src="data/site.js"></script>
+<script src="data/events.js"></script>
+<script src="data/activities.js"></script>
+
+<!-- ===== MAIN SCRIPT ===== -->
+<script>
+  // ---- Apply SITE data ----
+  if (typeof SITE !== 'undefined') {
+    document.getElementById('logoIcon').textContent = SITE.logoText;
+    document.getElementById('logoName').textContent = SITE.name;
+    document.getElementById('footerLogoIcon').textContent = SITE.logoText;
+    document.getElementById('footerLogoName').textContent = SITE.name;
+    document.title = SITE.name + ' - 北京·西北旺·公益跑团';
+    document.getElementById('joinWechat').textContent = SITE.wechat;
+
+    // Render hero stats
+    const statsEl = document.getElementById('heroStats');
+    if (statsEl && SITE.stats) {
+      statsEl.innerHTML = SITE.stats.map(s => `
+        <div class="stat-card glass-card">
+          <div class="stat-icon">${s.icon}</div>
+          <div class="stat-num">${s.num}</div>
+          <div class="stat-label">${s.label}</div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // ---- Render EVENTS timeline ----
+  if (typeof EVENTS !== 'undefined') {
+    const tl = document.getElementById('timeline');
+    const tagColors = {
+      '里程碑': { bg: 'rgba(168,85,247,0.1)', color: '#A855F7', icon: '🏆' },
+      '活动': { bg: 'rgba(56,189,248,0.1)', color: '#0EA5E9', icon: '🎉' }
+    };
+    tl.innerHTML = EVENTS.map((e, i) => {
+      const tc = tagColors[e.tag] || { bg: 'rgba(168,85,247,0.1)', color: '#A855F7', icon: '📌' };
+      return `
+        <div class="timeline-item reveal" style="transition-delay:${i * 0.12}s">
+          <div class="timeline-dot">${tc.icon}</div>
+          <div class="timeline-card glass-card">
+            <div class="timeline-meta">
+              <span class="timeline-date">${e.date}</span>
+              <span class="tag-pill" style="background:${tc.bg};color:${tc.color};border-color:${tc.color}33;">${e.tag}</span>
+            </div>
+            <div class="timeline-title">${e.title}</div>
+            <div class="timeline-desc">${e.desc}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ---- Render ACTIVITIES ----
+  if (typeof ACTIVITIES !== 'undefined') {
+    const grid = document.getElementById('activitiesGrid');
+    grid.innerHTML = ACTIVITIES.map((a, i) => `
+      <div class="activity-card reveal" style="transition-delay:${i * 0.1}s">
+        <div class="activity-emoji">${a.emoji}</div>
+        <div class="activity-date">${a.date}</div>
+        <div class="activity-title">${a.title}</div>
+        <div class="activity-desc">${a.desc}</div>
+      </div>
+    `).join('');
+  }
+
+  // ---- Navbar scroll ----
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // ---- Mobile menu ----
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  function closeMobile() {
+    mobileMenu.classList.remove('open');
+  }
+
+  // ---- Scroll reveal (IntersectionObserver) ----
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  function observeReveal() {
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  }
+  // Run once after render
+  observeReveal();
+
+  // Re-observe after dynamic content (timeline, activities) rendered above
+  setTimeout(observeReveal, 100);
+</script>
+</body>
+</html>
