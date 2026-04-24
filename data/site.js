@@ -1,6 +1,6 @@
 const SITE = {
   name: "西北旺跑步大本营",
-  logoText: "XR",
+  logoText: "xbw<br>run",
   wechat: "xbwrun",
   stats: [
     { icon: "🏃", num: "3x", label: "每周训练" },
