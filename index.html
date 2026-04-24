@@ -356,6 +356,13 @@
     .info-card-title { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
     .info-card-desc { font-size: 14px; color: var(--text-light); line-height: 1.75; }
     .info-card-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .info-card-list-group {
+      margin-top: 16px; margin-bottom: 2px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+      color: var(--purple); text-transform: none;
+    }
+    .info-card-list-group:first-of-type { margin-top: 14px; }
+    .info-card-list-group + .info-card-list { margin-top: 6px; }
     .info-card-list-item {
       display: flex; gap: 10px; font-size: 13px; color: var(--text-light); line-height: 1.55;
     }
@@ -428,8 +435,26 @@
     }
     .copy-chip.copied .copy-chip-icon { background: #10B981; }
     @media (max-width: 480px) {
-      .copy-chip { width: 100%; }
-      .copy-chip-text { font-size: 11.5px; }
+      .copy-chip {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        padding: 8px 10px 10px;
+        border-radius: 12px;
+      }
+      .copy-chip-text {
+        font-size: 11.5px;
+        white-space: normal;
+        word-break: break-all;
+        text-align: center;
+        line-height: 1.4;
+        color: var(--text);
+      }
+      .copy-chip-icon {
+        align-self: center;
+        padding: 5px 16px;
+      }
     }
 
     /* ===== NEWS CARDS ===== */
@@ -562,7 +587,8 @@
       .join-wechat { font-size: 26px; margin-bottom: 24px; }
 
       footer { padding: 44px 0 24px; }
-      .footer-inner { grid-template-columns: 1fr; gap: 28px; margin-bottom: 32px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 28px 20px; margin-bottom: 32px; }
+      .footer-inner > div:first-child { grid-column: 1 / -1; }
       .footer-brand-desc { max-width: 100%; }
     }
     @media (max-width: 480px) {
@@ -694,15 +720,21 @@
         <div class="info-card-body">
           <div class="info-card-title">活动介绍</div>
           <div class="info-card-desc">
-            每周三次常规例行训练，每年两次主题集训营，搭配每月测试赛与年度品牌赛事，覆盖全年训练节奏。
+            品牌赛事覆盖全年节奏，专项训练营深耕进阶需求，常规活动让每一周都有奔跑的理由。
           </div>
+          <div class="info-card-list-group">品牌活动</div>
           <div class="info-card-list">
-            <div class="info-card-list-item">周二 · 速度训练（中关村公园）</div>
-            <div class="info-card-list-item">周四 · 节奏训练（肖家河·绿动天地 / 西玉河湿地公园）</div>
-            <div class="info-card-list-item">周六 · 长距离、超慢跑 & 亲子 1+1（中关村公园）</div>
-            <div class="info-card-list-item">每年两次主题活动：冬训营 · 夏训营</div>
-            <div class="info-card-list-item">每月最后一周周四晚：肖家河绿动天地 10K 测试赛</div>
-            <div class="info-card-list-item">年度品牌赛事：百公里接力赛 · 10 公里测试赛 · 北清路 666</div>
+            <div class="info-card-list-item">百公里接力赛 · 每年 4 月底左右</div>
+            <div class="info-card-list-item">十公里竞速赛 · 每年 9 月底左右</div>
+            <div class="info-card-list-item">北清路全程 · 每年春节前</div>
+            <div class="info-card-list-item">夏季训练营 · 冬训 100 计划 · 面向马拉松爱好者</div>
+            <div class="info-card-list-item">悦动少年夏训营 · 青少年暑期训练营</div>
+          </div>
+          <div class="info-card-list-group">常规活动</div>
+          <div class="info-card-list">
+            <div class="info-card-list-item">日常例跑 · 每周二、周四 19:15，周六上午</div>
+            <div class="info-card-list-item">1+1 活动 · 周六上午，5–14 岁小朋友，跑步、跳绳与体能训练</div>
+            <div class="info-card-list-item">超慢跑 X 训练营 · 周六上午，初跑者技术培训与训练</div>
           </div>
         </div>
       </div>
