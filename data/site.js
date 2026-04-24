@@ -4,7 +4,7 @@ const SITE = {
   wechat: "xbwrun",
   stats: [
     { icon: "🏃", num: "3x", label: "每周训练" },
-    { icon: "🏅", num: "500+", label: "活跃跑者" },
+    { icon: "🏅", num: "2000+", label: "活跃跑者" },
     { icon: "💚", num: "0¥", label: "公益免费" },
     { icon: "📋", num: "6", label: "训练板块" }
   ]
