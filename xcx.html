@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>请在微信内打开 · 西北旺跑步大本营</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23A855F7'/%3E%3Cstop offset='1' stop-color='%23E879A8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ctext font-family='Arial,Helvetica,sans-serif' font-size='22' font-weight='800' fill='%23fff' text-anchor='middle'%3E%3Ctspan x='32' y='30'%3Exbw%3C/tspan%3E%3Ctspan x='32' y='52'%3Erun%3C/tspan%3E%3C/text%3E%3C/svg%3E" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; min-height: 100vh;
+      font-family: -apple-system, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+      color: #fff; overflow-x: hidden;
+    }
+    /* 背景图片 + 高斯模糊 */
+    .bg {
+      position: fixed; inset: 0;
+      background: url('assets/xiaochengxu.jpg') center / cover no-repeat;
+      filter: blur(18px) saturate(1.1);
+      transform: scale(1.1);
+      z-index: 0;
+    }
+    /* 渐变蒙版：增强文字可读性 */
+    .mask {
+      position: fixed; inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(168, 85, 247, 0.55) 0%,
+        rgba(232, 121, 168, 0.45) 50%,
+        rgba(0, 0, 0, 0.55) 100%
+      );
+      z-index: 1;
+    }
+    /* 内容容器 */
+    .wrap {
+      position: relative; z-index: 2;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 24px 20px;
+      gap: 24px;
+    }
+    .card {
+      width: 100%; max-width: 420px;
+      padding: 32px 24px 28px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(24px) saturate(1.3);
+      -webkit-backdrop-filter: blur(24px) saturate(1.3);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+    .logo {
+      width: 60px; height: 60px; margin: 0 auto 18px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #A855F7, #E879A8);
+      color: #fff; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; line-height: 1.05;
+      box-shadow: 0 10px 24px rgba(232, 121, 168, 0.4);
+    }
+    .title {
+      font-size: 20px; font-weight: 700; line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .sub {
+      font-size: 14px; line-height: 1.7;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 22px;
+    }
+    .tip {
+      display: inline-block;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.5px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      padding: 6px 12px; border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .link-box {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px dashed rgba(255, 255, 255, 0.35);
+      border-radius: 12px;
+      font-size: 13px; text-align: left;
+      word-break: break-all;
+      margin-bottom: 14px;
+    }
+    .link-text { flex: 1; min-width: 0; color: #fff; font-weight: 500; }
+    .copy-btn {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 15px; font-weight: 700; letter-spacing: 1px;
+      color: #6B21A8;
+      background: #fff;
+      border: none; border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+    .copy-btn:active { transform: scale(0.98); }
+    .copy-btn.ok {
+      background: linear-gradient(135deg, #A855F7, #E879A8);
+      color: #fff;
+    }
+    .steps {
+      margin-top: 22px;
+      text-align: left;
+      font-size: 13px; line-height: 1.85;
+      color: rgba(255, 255, 255, 0.88);
+    }
+    .steps-title {
+      font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 6px;
+    }
+    .steps ol { padding-left: 20px; }
+    .footer {
+      position: relative; z-index: 2;
+      font-size: 12px; color: rgba(255, 255, 255, 0.7);
+      text-align: center; padding-bottom: 4px;
+    }
+    .footer a { color: rgba(255,255,255,0.9); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.3); }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="mask"></div>
+  <div class="wrap">
+    <div class="card">
+      <div class="logo">xbw<br>run</div>
+      <div class="tip">请在微信内打开</div>
+      <div class="title">西北旺跑步大本营 · 报名活动</div>
+      <div class="sub">需在微信内打开 · 复制链接粘贴至聊天框点击即可跳转</div>
+
+      <div class="link-box">
+        <span class="link-text" id="linkText">#小程序://闪动/5qDW1xLOpfbZddu</span>
+      </div>
+      <button type="button" class="copy-btn" id="copyBtn">复制链接</button>
+
+      <div class="steps">
+        <div class="steps-title">操作步骤</div>
+        <ol>
+          <li>点击上方"复制链接"</li>
+          <li>打开微信，粘贴到任一聊天框</li>
+          <li>点击链接即可跳转小程序</li>
+        </ol>
+      </div>
+    </div>
+    <div class="footer">
+      <a href="index.html">← 返回西北旺跑步大本营官网</a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var LINK = '#小程序://闪动/5qDW1xLOpfbZddu';
+      var btn = document.getElementById('copyBtn');
+      btn.addEventListener('click', function () {
+        var ok = false;
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(LINK);
+            ok = true;
+          } else {
+            var ta = document.createElement('textarea');
+            ta.value = LINK; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+          }
+        } catch (e) { ok = false; }
+        btn.textContent = ok ? '✓ 已复制，去微信粘贴' : '复制失败，请手动长按选择';
+        btn.classList.add('ok');
+        setTimeout(function () {
+          btn.textContent = '复制链接';
+          btn.classList.remove('ok');
+        }, 2400);
+      });
+    })();
+  </script>
+</body>
+</html>
