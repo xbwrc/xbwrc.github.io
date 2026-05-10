@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>证书下载 · 西北旺跑步大本营</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: #E879A8; --purple: #A855F7; --blue: #38BDF8;
+      --bg-dark: #0B0A1F; --text: #EDEAFF; --text-mid: #A8A2D9; --text-dim: #6B6494;
+      --gradient: linear-gradient(135deg, var(--pink), var(--purple) 45%, var(--blue));
+      --radius: 16px; --radius-lg: 22px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; min-height: 100%; }
+    body {
+      font-family: 'Outfit', 'Noto Sans SC', sans-serif;
+      background: var(--bg-dark); color: var(--text);
+      display: flex; flex-direction: column; align-items: center;
+      min-height: 100vh; position: relative; overflow-x: hidden;
+    }
+    /* ===== Background Orbs ===== */
+    .bg-orb {
+      position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; opacity: 0.3;
+      animation: orbFloat 14s ease-in-out infinite;
+    }
+    .orb-1 { width: 420px; height: 420px; background: var(--pink); top: -8%; left: -10%; }
+    .orb-2 { width: 500px; height: 500px; background: var(--blue); bottom: -12%; right: -10%; animation-delay: -6s; }
+    .orb-3 { width: 300px; height: 300px; background: var(--purple); top: 50%; left: 50%; animation-delay: -3s; }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(30px,-20px) scale(1.04); }
+      66% { transform: translate(-20px,15px) scale(0.97); }
+    }
+
+    /* ===== Container ===== */
+    .app {
+      position: relative; z-index: 2; width: 100%; max-width: 560px;
+      padding: 40px 24px 48px; display: flex; flex-direction: column; align-items: center;
+    }
+    .back-home {
+      align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text-mid); font-size: 14px; margin-bottom: 24px; transition: color 0.2s;
+    }
+    .back-home:hover { color: var(--text); }
+    .logo-box {
+      width: 56px; height: 56px; border-radius: 14px; background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 30px rgba(168,85,247,0.3); margin-bottom: 18px;
+    }
+    .logo-box img { width: 82%; height: 82%; object-fit: contain; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: var(--text-dim); letter-spacing: 2px; margin-bottom: 32px; }
+
+    /* ===== Card ===== */
+    .card {
+      width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg); padding: 32px 28px;
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 600; color: var(--text-mid);
+      margin-bottom: 8px; letter-spacing: 1px;
+    }
+    .form-group input {
+      width: 100%; padding: 14px 18px; border-radius: 12px; font-size: 17px;
+      font-family: inherit; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text); outline: none; transition: all 0.25s;
+    }
+    .form-group input:focus {
+      border-color: var(--purple); box-shadow: 0 0 0 3px rgba(168,85,247,0.2);
+      background: rgba(255,255,255,0.08);
+    }
+    .form-group input::placeholder { color: rgba(255,255,255,0.18); }
+    .btn-submit {
+      width: 100%; padding: 15px; border-radius: 14px; border: none; cursor: pointer;
+      font-family: inherit; font-size: 17px; font-weight: 700; letter-spacing: 1px;
+      background: var(--gradient); color: #fff;
+      box-shadow: 0 6px 24px rgba(232,121,168,0.35);
+      transition: all 0.25s; margin-top: 8px;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(232,121,168,0.5); }
+    .btn-submit:disabled { opacity: 0.5; pointer-events: none; }
+
+    /* ===== Result ===== */
+    .result { display: none; margin-top: 28px; width: 100%; }
+    .result.show { display: block; }
+    .cert-preview {
+      width: 100%; border-radius: var(--radius); overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.12);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+    .cert-preview img { width: 100%; display: block; -webkit-touch-callout: default; }
+    .cert-actions { display: flex; gap: 12px; margin-top: 16px; }
+    .cert-actions button {
+      flex: 1; padding: 13px; border-radius: 12px; border: none; cursor: pointer;
+      font-family: inherit; font-size: 14px; font-weight: 600; transition: all 0.2s;
+    }
+    .btn-save {
+      background: var(--gradient); color: #fff;
+      box-shadow: 0 4px 18px rgba(232,121,168,0.3);
+    }
+    .btn-reset {
+      background: rgba(255,255,255,0.06); color: var(--text-mid);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .btn-reset:hover { background: rgba(255,255,255,0.1); }
+
+    /* ===== Toast ===== */
+    .toast {
+      position: fixed; top: 24px; left: 50%; transform: translateX(-50%);
+      z-index: 200; padding: 14px 28px; border-radius: 50px;
+      font-size: 14px; font-weight: 600; letter-spacing: 1px;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      animation: toastIn 0.35s ease-out; pointer-events: none; opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .toast.show { opacity: 1; }
+    .toast.error { background: rgba(239,68,68,0.2); color: #FCA5A5; border: 1px solid rgba(239,68,68,0.4); }
+    .toast.info { background: rgba(168,85,247,0.2); color: #C4B5FD; border: 1px solid rgba(168,85,247,0.4); }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-12px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .spinner {
+      display: none; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-submit.loading .spinner { display: inline-block; }
+    .btn-submit.loading .btn-text { display: none; }
+
+    @media (max-width: 480px) {
+      .app { padding: 24px 16px 36px; }
+      .card { padding: 24px 18px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="app">
+    <a href="index.html" class="back-home">← 返回首页</a>
+    <div class="logo-box"><img src="assets/logo2.png" alt="logo" /></div>
+    <h1>完赛证书下载</h1>
+    <div class="subtitle">CERTIFICATE DOWNLOAD</div>
+
+    <div class="card">
+      <div class="form-group">
+        <label>真实姓名</label>
+        <input type="text" id="nameInput" placeholder="请输入姓名" autocomplete="off" maxlength="30" />
+      </div>
+      <div class="form-group">
+        <label>身份证号后 4 位</label>
+        <input type="text" id="suffixInput" placeholder="例：0012" autocomplete="off" maxlength="4" inputmode="numeric" pattern="[0-9]*" />
+      </div>
+      <button class="btn-submit" id="submitBtn" onclick="fetchCert()">
+        <span class="spinner"></span>
+        <span class="btn-text">查询证书</span>
+      </button>
+    </div>
+
+    <div class="result" id="result">
+      <div class="cert-preview"><img id="certImg" alt="完赛证书" /></div>
+      <div class="cert-actions">
+        <button class="btn-save" onclick="saveImg()">保存到相册</button>
+        <button class="btn-reset" onclick="resetForm()">重新查询</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_BASE = '/java';
+
+    function showToast(msg, type) {
+      type = type || 'info';
+      var el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = 'toast show ' + type;
+      clearTimeout(el._tid);
+      el._tid = setTimeout(function () { el.className = 'toast'; }, 3000);
+    }
+
+    function setLoading(loading) {
+      var btn = document.getElementById('submitBtn');
+      btn.className = loading ? 'btn-submit loading' : 'btn-submit';
+      btn.disabled = loading;
+      document.getElementById('nameInput').disabled = loading;
+      document.getElementById('suffixInput').disabled = loading;
+    }
+
+    async function fetchCert() {
+      var name = document.getElementById('nameInput').value.trim();
+      var suffix = document.getElementById('suffixInput').value.trim();
+      if (!name) { showToast('请输入姓名', 'error'); return; }
+      if (!suffix || !/^\d{4}$/.test(suffix)) { showToast('请输入正确的身份证后 4 位', 'error'); return; }
+
+      setLoading(true);
+      document.getElementById('result').classList.remove('show');
+
+      try {
+        var url = API_BASE + '/api/cert/team?name=' + encodeURIComponent(name) + '&idSuffix=' + encodeURIComponent(suffix);
+        var res = await fetch(url);
+
+        if (!res.ok) {
+          // 非 2xx → 尝试读 JSON 错误信息
+          var errMsg = '查询失败 (HTTP ' + res.status + ')';
+          try {
+            var errBody = await res.json();
+            errMsg = errBody.message || errBody.error || errMsg;
+          } catch (_) {}
+          showToast(errMsg, 'error');
+          setLoading(false);
+          return;
+        }
+
+        // 检查返回类型：图片 vs JSON
+        var contentType = res.headers.get('Content-Type') || '';
+        if (contentType.indexOf('image/') !== -1) {
+          // 图片直接展示
+          var blob = await res.blob();
+          var imgUrl = URL.createObjectURL(blob);
+          var img = document.getElementById('certImg');
+          img.src = imgUrl;
+          img._blobUrl = imgUrl;
+          document.getElementById('result').classList.add('show');
+        } else {
+          // 可能是 JSON 格式的错误
+          var text = await res.text();
+          try {
+            var j = JSON.parse(text);
+            showToast(j.message || j.error || '未知错误', 'error');
+          } catch (_) {
+            showToast('返回数据格式异常', 'error');
+          }
+        }
+      } catch (err) {
+        showToast('网络错误：' + err.message, 'error');
+      }
+      setLoading(false);
+    }
+
+    function saveImg() {
+      var img = document.getElementById('certImg');
+      var url = img._blobUrl || img.src;
+      if (!url) { showToast('暂无证书可保存', 'error'); return; }
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = '完赛证书.jpg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('证书已开始下载');
+    }
+
+    function resetForm() {
+      document.getElementById('result').classList.remove('show');
+      document.getElementById('nameInput').value = '';
+      document.getElementById('suffixInput').value = '';
+      document.getElementById('nameInput').focus();
+    }
+  </script>
+</body>
+</html>
