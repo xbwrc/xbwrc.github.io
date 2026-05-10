@@ -61,7 +61,19 @@
 
   <script>
     // ========= Config =========
-    const PAGE_SIZE = 8;          // 每页展示条数
+    let PAGE_SIZE = (window.innerWidth <= 768) ? 5 : 8;
+
+    // 窗口缩放时重新分页
+    window.addEventListener('resize', () => {
+      const newSize = (window.innerWidth <= 768) ? 5 : 8;
+      if (newSize !== PAGE_SIZE) {
+        PAGE_SIZE = newSize;
+        pages = paginate(teams, PAGE_SIZE);
+        if (currentPage >= pages.length) currentPage = 0;
+        renderPage(currentPage);
+        progressStart = Date.now();
+      }
+    });
     const INTERVAL_MS = 10000;    // 翻页间隔
     const USE_MOCK = false;       // 切换到真实接口
     // const API_URL = 'http://127.0.0.1:8081/api/race/stats';  // 后端聚合接口
