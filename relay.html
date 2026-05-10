@@ -67,7 +67,7 @@
     const USE_MOCK = false;       // 切换到真实接口
     // const API_URL = 'http://127.0.0.1:8081/api/race/stats';  // 后端聚合接口
     const API_URL = '/java/api/race/stats';  // 后端聚合接口
-    const API_PAGE_SIZE = isMobile ? 5 : 200;  // 手机端只取首页，PC全量
+    const API_PAGE_SIZE = 200;  // 一次性拉全部，前端分页
 
     // ========= Mock Data =========
     function buildMock() {
