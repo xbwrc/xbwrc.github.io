@@ -351,14 +351,14 @@ body {
   }
   .page-indicator {
     display: flex; justify-content: space-between; align-items: center;
-    width: 100%; padding: 0 8px;
+    width: 100%; padding: 0 4px;
   }
   .page-indicator #pageLabel { font-size: 12px; }
   .dots {
-    display: flex; gap: 6px; flex: 1; justify-content: center;
+    display: flex; gap: 10px; flex: 1; justify-content: center;
   }
-  .dot { width: 8px; height: 8px; }
-  .dot.active { width: 24px; }
+  .dot { width: 10px; height: 10px; }
+  .dot.active { width: 28px; }
   .progress-bar { margin: 0; height: 2px; }
   .footer .progress-bar { display: none; }
   .footer #flipHint { font-size: 11px; color: var(--text-dim); text-align: center; }
