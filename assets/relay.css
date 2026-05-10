@@ -289,66 +289,77 @@ body {
   .row .col-rank { font-size: 24px; }
 }
 @media (max-width: 768px) {
-  html, body { height: auto; overflow: auto; }
+  html, body { height: 100%; overflow: hidden; }
   body { overflow-x: hidden; }
-  .app { padding: 16px; min-height: 100vh; display: block; }
-  .board { flex: 0 0 auto; padding: 14px 14px 16px; display: block; }
-  .rows { overflow: visible; flex: 0 0 auto; display: block; }
-  .header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
-  .title-group h1 { font-size: 24px; }
+  .app {
+    height: 100%; display: flex; flex-direction: column;
+    padding: 8px 12px;
+  }
+  .header { flex-direction: column; align-items: flex-start; gap: 4px; margin-bottom: 6px; flex-shrink: 0; }
+  .header-left { gap: 10px; }
+  .header-right { flex-wrap: wrap; gap: 6px; }
+  .logo-box { width: 44px; height: 44px; border-radius: 12px; }
+  .title-group h1 { font-size: 20px; }
+  .subtitle { font-size: 11px; letter-spacing: 1.5px; margin-bottom: 0; }
+  .status-pill { padding: 4px 12px; font-size: 11px; }
+
+  .board {
+    flex: 1; min-height: 0; overflow: hidden;
+    display: flex; flex-direction: column;
+    padding: 8px 10px 6px;
+  }
   .board-head { display: none; }
 
+  .rows {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; gap: 3px; margin-top: 0;
+  }
   .row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 10px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-    font-size: 14px;
-    flex: none;
-    min-height: 0;
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: 4px 8px; padding: 4px 10px; margin-bottom: 0;
+    font-size: 13px; flex: 1 1 0; min-height: 0;
   }
   .row .col-rank {
-    flex: 0 0 auto;
-    width: 44px;
-    font-size: 26px;
-    text-align: center;
-    color: #FF4DCD;
-    text-shadow: 0 0 10px rgba(255, 77, 205, 0.55);
+    flex: 0 0 auto; width: 36px; font-size: 22px; text-align: center;
+    color: #FF4DCD; text-shadow: 0 0 10px rgba(255, 77, 205, 0.55);
   }
   .row .col-team {
-    flex: 0 0 calc(100% - 54px);
-    font-size: 17px;
-    font-weight: 700;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    flex: 0 0 calc(100% - 44px); font-size: 15px; font-weight: 700;
+    min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     color: var(--text);
   }
   .row .col-laps,
   .row .col-total-laps,
   .row .col-time,
   .row .col-pace {
-    flex: 0 0 auto;
-    font-size: 12px;
-    color: var(--text);
-    white-space: nowrap;
-    padding: 3px 8px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.04);
-    letter-spacing: 0;
+    flex: 0 0 auto; font-size: 11px; color: var(--text);
+    white-space: nowrap; padding: 2px 6px; border-radius: 5px;
+    background: rgba(255, 255, 255, 0.04); letter-spacing: 0;
   }
-  .row > div:nth-child(3)::before { content: "棒1："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 2px; }
-  .row > div:nth-child(4)::before { content: "棒2："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 2px; }
-  .row > div:nth-child(5)::before { content: "棒3："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 2px; }
-  .row .col-total-laps::before { content: "总圈："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 2px; }
-  .row .col-time::before { content: "用时："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 2px; }
-  .row .col-pace::before { content: "配速："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 2px; }
+  .row > div:nth-child(3)::before { content: "棒1："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 1px; }
+  .row > div:nth-child(4)::before { content: "棒2："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 1px; }
+  .row > div:nth-child(5)::before { content: "棒3："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 1px; }
+  .row .col-total-laps::before { content: "总圈："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 1px; }
+  .row .col-time::before { content: "用时："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 1px; }
+  .row .col-pace::before { content: "配速："; color: #FF4DCD; text-shadow: 0 0 6px rgba(255,77,205,0.5); margin-right: 1px; }
   .row .col-total-laps { color: var(--text); font-weight: 700; }
   .row .col-time, .row .col-pace { color: var(--text); font-weight: 600; }
 
-  .footer { flex-direction: column; gap: 10px; align-items: stretch; font-size: 12px; }
-  .progress-bar { margin: 0; }
+  .footer {
+    flex-direction: column; gap: 4px; align-items: stretch;
+    font-size: 11px; margin-top: 6px; flex-shrink: 0;
+  }
+  .page-indicator {
+    display: flex; justify-content: space-between; align-items: center;
+    width: 100%; padding: 0 8px;
+  }
+  .page-indicator #pageLabel { font-size: 12px; }
+  .dots {
+    display: flex; gap: 6px; flex: 1; justify-content: center;
+  }
+  .dot { width: 8px; height: 8px; }
+  .dot.active { width: 24px; }
+  .progress-bar { margin: 0; height: 2px; }
+  .footer .progress-bar { display: none; }
+  .footer #flipHint { font-size: 11px; color: var(--text-dim); text-align: center; }
 }

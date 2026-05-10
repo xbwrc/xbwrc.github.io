@@ -55,7 +55,7 @@
         <span class="dots" id="dots"></span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <div>每 <strong id="intervalLabel">5</strong> 秒自动翻页</div>
+      <div id="flipHint">每 <strong id="intervalLabel">5</strong> 秒自动翻页</div>
     </footer>
   </div>
 
@@ -178,6 +178,7 @@
     const progressEl = document.getElementById('progressFill');
     const clockEl = document.getElementById('clock');
     document.getElementById('intervalLabel').textContent = INTERVAL_MS / 1000;
+    document.getElementById('flipHint').textContent = isMobile ? '点击页码切换页面' : '每 ' + (INTERVAL_MS/1000) + ' 秒自动翻页';
 
     let teams = [];
     let pages = [];
@@ -256,13 +257,17 @@
       clockEl.textContent = fmtClock(new Date());
     }
 
+    const isMobile = window.innerWidth <= 768;
+    let autoFlipTimer = null;
+
     function goToPage(idx) {
       if (idx < 0 || idx >= pages.length) return;
       currentPage = idx;
       renderPage(currentPage);
       progressStart = Date.now();
-      // reset: 显示后的下一翻才是 currentPage+1
-      currentPage = (currentPage + 1) % pages.length;
+      if (!isMobile) {
+        currentPage = (currentPage + 1) % pages.length;
+      }
     }
 
     // ========= Init =========
@@ -274,12 +279,13 @@
       await refreshData();
       tick();
 
-      setInterval(async () => {
-        // 翻到最后一页后重新拉取数据再轮转
-        if (currentPage === 0) await refreshData();
-        progressStart = Date.now();
-        tick();
-      }, INTERVAL_MS);
+      if (!isMobile) {
+        autoFlipTimer = setInterval(async () => {
+          if (currentPage === 0) await refreshData();
+          progressStart = Date.now();
+          tick();
+        }, INTERVAL_MS);
+      }
     })();
   </script>
 </body>
