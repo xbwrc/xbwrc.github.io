@@ -21,7 +21,7 @@
       <div class="header-left">
         <a href="index.html" class="logo-box"><img src="assets/logo2.png" alt="logo" /></a>
         <div class="title-group">
-          <h1>接力赛成绩排行榜</h1>
+          <h1>西北旺镇第三届百公里接力赛<span class="br-pc"><br></span>暨"家·时光"游园会</h1>
           <div class="subtitle">XBWRUN RELAY · FINAL STANDINGS</div>
         </div>
       </div>
@@ -55,7 +55,7 @@
         <span class="dots" id="dots"></span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <div id="flipHint">每 <strong id="intervalLabel">5</strong> 秒自动翻页</div>
+      <div id="flipHint" style="cursor:pointer;" onclick="toggleFlip()">每 10 秒自动翻页</div>
     </footer>
   </div>
 
@@ -166,97 +166,7 @@
     const dotsEl = document.getElementById('dots');
     const progressEl = document.getElementById('progressFill');
     const clockEl = document.getElementById('clock');
-    document.getElementById('intervalLabel').textContent = INTERVAL_MS / 1000;
-    document.getElementById('flipHint').textContent = isMobile ? '点击页码切换页面' : '每 ' + (INTERVAL_MS/1000) + ' 秒自动翻页';
-
-    let teams = [];
-    let pages = [];
-    let currentPage = 0;
-
-    function paginate(list, size) {
-      const out = [];
-      for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
-      return out.length ? out : [[]];
-    }
-
-    function renderDots() {
-      dotsEl.innerHTML = pages.map((_, i) =>
-        `<span class="dot ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})" style="cursor:pointer;"></span>`
-      ).join('');
-    }
-
-    function renderPage(idx) {
-      const page = pages[idx] || [];
-      rowsEl.innerHTML = page.map((t, i) => {
-        const rank = idx * PAGE_SIZE + i + 1;
-        const topCls = rank === 1 ? 'top-1' : rank === 2 ? 'top-2' : rank === 3 ? 'top-3' : '';
-        const timeStr = t.totalTimeStr || fmtTime(t.totalTimeSec);
-        const paceStr = fmtPace(t.avgPaceStr, t.avgPaceSec);
-        const finished = t.totalLaps >= 27;
-        return `
-          <div class="row enter ${topCls}" style="animation-delay:${i * 60}ms">
-            <div class="col-rank">${String(rank).padStart(2, '0')}</div>
-            <div class="col-team">${finished ? '<span style="display:inline-block;margin-right:8px;padding:2px 8px;border-radius:4px;font-size:13px;background:#FFD700;color:#0B0A1F;vertical-align:middle;">完赛</span>' : ''}${t.teamName}</div>
-            <div class="col-laps">${t.leg1Laps ?? '-'}</div>
-            <div class="col-laps">${t.leg2Laps ?? '-'}</div>
-            <div class="col-laps">${t.leg3Laps ?? '-'}</div>
-            <div class="col-total-laps">${t.totalLaps || 0}</div>
-            <div class="col-time">${timeStr}</div>
-            <div class="col-pace">${paceStr}</div>
-          </div>`;
-      }).join('');
-      pageLabelEl.textContent = `第 ${idx + 1} / ${pages.length} 页`;
-      renderDots();
-    }
-
-    function sortTeams(list) {
-      // 总圈数降序，相同圈数按总用时升序
-      return [...list].sort((a, b) => {
-        if (b.totalLaps !== a.totalLaps) return b.totalLaps - a.totalLaps;
-        return (a.totalTimeSec || 0) - (b.totalTimeSec || 0);
-      });
-    }
-
-    async function refreshData() {
-      try {
-        const list = await fetchRelayData();
-        teams = sortTeams(list);
-        pages = paginate(teams, PAGE_SIZE);
-        if (currentPage >= pages.length) currentPage = 0;
-      } catch (err) {
-        console.error('[relay] fetch failed:', err);
-      }
-    }
-
-    function tick() {
-      renderPage(currentPage);
-      currentPage = (currentPage + 1) % pages.length;
-    }
-
-    // 进度条
-    let progressStart = Date.now();
-    function updateProgress() {
-      const pct = Math.min(100, ((Date.now() - progressStart) / INTERVAL_MS) * 100);
-      progressEl.style.width = pct + '%';
-      requestAnimationFrame(updateProgress);
-    }
-
-    // 时钟
-    function updateClock() {
-      clockEl.textContent = fmtClock(new Date());
-    }
-
-    let autoFlipTimer = null;
-
-    function goToPage(idx) {
-      if (idx < 0 || idx >= pages.length) return;
-      currentPage = idx;
-      renderPage(currentPage);
-      progressStart = Date.now();
-      if (!isMobile) {
-        currentPage = (currentPage + 1) % pages.length;
-      }
-    }
+document.getElementById('flipHint').textContent = isMobile ? '点击页码切换页面' : '每 ' + (INTERVAL_MS/1000) + ' 秒自动翻页 · 点击暂停';
 
     // ========= Init =========
     (async function init() {

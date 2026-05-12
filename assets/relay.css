@@ -83,14 +83,18 @@ body {
 }
 .logo-box img { width: 82%; height: 82%; object-fit: contain; }
 .title-group h1 {
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 800;
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: 1px;
   background: var(--gradient-h);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+.br-pc { display: inline; }
+@media (max-width: 768px) {
+  .br-pc { display: none; }
 }
 .title-group .subtitle {
   margin-top: 6px;
@@ -282,7 +286,7 @@ body {
 /* ===== Responsive (for preview on smaller screens) ===== */
 @media (max-width: 1200px) {
   .app { padding: 20px 28px; }
-  .title-group h1 { font-size: 28px; }
+  .title-group h1 { font-size: 22px; }
   .board-head, .row { grid-template-columns: 70px 2.7fr repeat(3, 0.53fr) 0.6fr 1.1fr 1.1fr; gap: 10px; font-size: 14px; }
   .row { font-size: 18px; padding: 14px 12px; }
   .row .col-team { font-size: 19px; }
@@ -299,7 +303,7 @@ body {
   .header-left { gap: 10px; }
   .header-right { flex-wrap: wrap; gap: 6px; }
   .logo-box { width: 44px; height: 44px; border-radius: 12px; }
-  .title-group h1 { font-size: 20px; }
+  .title-group h1 { font-size: 16px; }
   .subtitle { font-size: 11px; letter-spacing: 1.5px; margin-bottom: 0; }
   .status-pill { padding: 4px 12px; font-size: 11px; }
 
