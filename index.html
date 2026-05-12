@@ -933,8 +933,27 @@
       </div>
     </div>
     <div class="hero-right">
-      <div class="hero-stats" id="heroStats">
-        <!-- rendered by JS from SITE.stats -->
+      <div class="hero-stats">
+        <div class="stat-card glass-card">
+          <div class="stat-icon">🏃</div>
+          <div class="stat-num">3x</div>
+          <div class="stat-label">每周训练</div>
+        </div>
+        <div class="stat-card glass-card">
+          <div class="stat-icon">🏅</div>
+          <div class="stat-num">2000+</div>
+          <div class="stat-label">活跃跑者</div>
+        </div>
+        <div class="stat-card glass-card">
+          <div class="stat-icon">💚</div>
+          <div class="stat-num">0¥</div>
+          <div class="stat-label">公益免费</div>
+        </div>
+        <div class="stat-card glass-card">
+          <div class="stat-icon">📍</div>
+          <div class="stat-num">1中心n分部</div>
+          <div class="stat-label">训练场地</div>
+        </div>
       </div>
     </div>
   </div>
@@ -992,7 +1011,7 @@
             <div class="venue-item">
               <div class="venue-badge">分部</div>
               <div class="venue-text">
-                <div class="venue-name">海淀公园 <span class="venue-alias">· 六分（六郎庄）</span></div>
+                <div class="venue-name">六郎庄海淀公园 <span class="venue-alias">· 六分</span></div>
               </div>
             </div>
             <div class="venue-item" style="color:var(--text-muted);font-size:13px;padding:6px 0 0 58px;">
@@ -1220,7 +1239,7 @@
     <div class="news-grid" style="margin-top:36px;">
       <a href="theme-relay-2026.html" class="news-card reveal reveal-d1">
         <div class="news-card-tag">百公里接力赛</div>
-        <div class="news-card-title">西北旺镇第三届百公里接力赛</div>
+        <div class="news-card-title">西北旺镇第三届百公里接力赛暨"家·时光"游园会</div>
         <div class="news-card-desc">为爱奔跑，感恩母亲！成绩排行榜 · 直播相册 · 证书下载 · 赛事手册，点击进入专题页。</div>
         <div class="news-card-link">进入专题 →</div>
       </a>
@@ -1325,75 +1344,8 @@
   </div>
 </footer>
 
-<!-- ===== DATA SCRIPTS ===== -->
-<script src="data/site.js"></script>
-<script src="data/events.js"></script>
-<script src="data/activities.js"></script>
-
 <!-- ===== MAIN SCRIPT ===== -->
 <script>
-  // ---- Apply SITE data ----
-  if (typeof SITE !== 'undefined') {
-    document.getElementById('logoName').textContent = SITE.name;
-    document.getElementById('footerLogoName').textContent = SITE.name;
-    const wx = document.getElementById('joinWechat');
-    if (wx) wx.textContent = SITE.wechat;
-
-    // Render hero stats
-    const statsEl = document.getElementById('heroStats');
-    if (statsEl && SITE.stats) {
-      statsEl.innerHTML = SITE.stats.map(s => `
-        <div class="stat-card glass-card">
-          <div class="stat-icon">${s.icon}</div>
-          <div class="stat-num">${s.num}</div>
-          <div class="stat-label">${s.label}</div>
-        </div>
-      `).join('');
-    }
-  }
-
-  // ---- Render EVENTS timeline (if placeholder exists) ----
-  if (typeof EVENTS !== 'undefined') {
-    const tl = document.getElementById('timeline');
-    if (tl) {
-      const tagColors = {
-        '里程碑': { bg: 'rgba(168,85,247,0.1)', color: '#A855F7', icon: '🏆' },
-        '活动': { bg: 'rgba(56,189,248,0.1)', color: '#0EA5E9', icon: '🎉' }
-      };
-      tl.innerHTML = EVENTS.map((e, i) => {
-        const tc = tagColors[e.tag] || { bg: 'rgba(168,85,247,0.1)', color: '#A855F7', icon: '📌' };
-        return `
-          <div class="timeline-item reveal" style="transition-delay:${i * 0.12}s">
-            <div class="timeline-dot">${tc.icon}</div>
-            <div class="timeline-card glass-card">
-              <div class="timeline-meta">
-                <span class="timeline-date">${e.date}</span>
-                <span class="tag-pill" style="background:${tc.bg};color:${tc.color};border-color:${tc.color}33;">${e.tag}</span>
-              </div>
-              <div class="timeline-title">${e.title}</div>
-              <div class="timeline-desc">${e.desc}</div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-  }
-
-  // ---- Render ACTIVITIES (大本营新闻) ----
-  if (typeof ACTIVITIES !== 'undefined') {
-    const grid = document.getElementById('activitiesGrid');
-    if (grid) {
-      grid.innerHTML = ACTIVITIES.map((a, i) => `
-        <div class="activity-card reveal" style="transition-delay:${i * 0.1}s">
-          <div class="activity-emoji">${a.emoji}</div>
-          <div class="activity-date">${a.date}</div>
-          <div class="activity-title">${a.title}</div>
-          <div class="activity-desc">${a.desc}</div>
-        </div>
-      `).join('');
-    }
-  }
-
   // ---- Navbar scroll ----
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
