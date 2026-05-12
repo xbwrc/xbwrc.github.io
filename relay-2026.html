@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>西北旺镇百公里接力赛成绩排行榜</title>
+  <meta name="description" content="西北旺跑步大本营百公里接力赛成绩排行榜。" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/relay.css" />
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+  <div class="bg-orb orb-3"></div>
+
+  <div class="app">
+    <header class="header">
+      <div class="header-left">
+        <a href="index.html" class="logo-box"><img src="assets/logo2.png" alt="logo" /></a>
+        <div class="title-group">
+          <h1>西北旺镇第三届百公里接力赛<span class="br-pc"><br></span>暨"家·时光"游园会</h1>
+          <div class="subtitle">XBWRUN RELAY · FINAL STANDINGS</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="status-pill" style="border-color:rgba(255,255,255,0.15);">
+          <span style="color:#FFD700;">&#9733;</span>
+          <span>比赛结束</span>
+        </div>
+        <a href="cert-2026.html" class="status-pill" style="text-decoration:none;color:var(--pink);border-color:rgba(232,121,168,0.3);">📜 证书下载</a>
+        <div class="clock" id="clock">--:--:--</div>
+      </div>
+    </header>
+
+    <section class="board">
+      <div class="board-head">
+        <div>序号</div>
+        <div>队伍名</div>
+        <div>棒1 圈数</div>
+        <div>棒2 圈数</div>
+        <div>棒3 圈数</div>
+        <div>总圈数</div>
+        <div>总用时</div>
+        <div>平均配速</div>
+      </div>
+      <div class="rows" id="rows"></div>
+    </section>
+
+    <footer class="footer">
+      <div class="page-indicator">
+        <span id="pageLabel">第 1 / 1 页</span>
+        <span class="dots" id="dots"></span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div id="flipHint" style="cursor:pointer;" onclick="toggleFlip()">每 10 秒自动翻页</div>
+    </footer>
+  </div>
+
+  <script>
+    // ========= Config =========
+    const isMobile = window.innerWidth <= 768;
+    let PAGE_SIZE = isMobile ? 5 : 8;
+    const INTERVAL_MS = 10000;
+    const USE_MOCK = false;
+    const API_URL = '/java/api/race/stats';
+    const API_PAGE_SIZE = 200;
+
+    // ========= Mock Data =========
+    function buildMock() {
+      const teamNames = [
+        '风驰电掣队', '奥森破风', '清河追风', '西玉河闪电',
+        '肖家河飞鹰', '中关村极速', '永丰驰骋', '上地疾风',
+        '百望山猎豹', '颐和园快马', '万寿路轻骑', '五棵松奔雷',
+        '海淀黄金腿', '西山飞燕', '紫竹院流星', '圆明园蓝调',
+        '玉泉路风行', '学院路闪耀', '清华园速度', '知春路雷霆'
+      ];
+      return teamNames.map((name, i) => {
+        const leg1 = 8 + Math.floor(Math.random() * 6);
+        const leg2 = 7 + Math.floor(Math.random() * 6);
+        const leg3 = 7 + Math.floor(Math.random() * 6);
+        const totalLaps = leg1 + leg2 + leg3;
+        const totalSec = totalLaps * 240 + Math.floor(Math.random() * 180);
+        const paceSec = Math.round(totalSec / totalLaps / 0.4);
+        return { teamId: i + 1, teamName: name, leg1Laps: leg1, leg2Laps: leg2, leg3Laps: leg3, totalLaps, totalTimeSec: totalSec, avgPaceSec: paceSec };
+      });
+    }
+
+    async function fetchRelayData() {
+      if (USE_MOCK) return buildMock();
+      const url = `${API_URL}?pageSize=${API_PAGE_SIZE}&current=1`;
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('接口请求失败: ' + res.status);
+      const json = await res.json();
+      const list = json?.data?.result?.list || [];
+      return list.map(t => {
+        const chipMap = {};
+        (t.chips || []).forEach(c => { chipMap[c.label] = c; });
+        const leg1 = chipMap.A?.circles;
+        const leg2 = chipMap.B?.circles;
+        const leg3 = chipMap.C?.circles;
+        const totalLaps = (leg1 || 0) + (leg2 || 0) + (leg3 || 0);
+        const sumSec = ['A','B','C'].map(k => chipMap[k]?.totalSeconds || 0).reduce((a, b) => a + b, 0);
+        return { teamId: t.id, teamName: t.teamName, leg1Laps: leg1, leg2Laps: leg2, leg3Laps: leg3, totalLaps, totalTimeSec: sumSec || null, totalTimeStr: fmtTimeFromSec(sumSec), avgPaceStr: t.avgPaceMinPerKm || null };
+      });
+    }
+
+    // ========= Formatters =========
+    function fmtTimeFromSec(sec) {
+      if (!sec) return null;
+      const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+      const pad = n => String(n).padStart(2, '0');
+      return `${pad(h)}:${pad(m)}:${pad(s)}`;
+    }
+    function fmtTime(sec) { return fmtTimeFromSec(sec) || '--'; }
+    function fmtPace(paceStr, sec) {
+      if (paceStr) { const [m, s] = paceStr.split(':'); return `${parseInt(m, 10)}'${(s || '00').padStart(2, '0')}"/km`; }
+      if (sec == null) return '--';
+      const m = Math.floor(sec / 60), s = sec % 60;
+      return `${m}'${String(s).padStart(2, '0')}"/km`;
+    }
+    function fmtClock(d) {
+      const pad = n => String(n).padStart(2, '0');
+      return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+
+    // ========= Rendering =========
+    const rowsEl = document.getElementById('rows');
+    const pageLabelEl = document.getElementById('pageLabel');
+    const dotsEl = document.getElementById('dots');
+    const progressEl = document.getElementById('progressFill');
+    const clockEl = document.getElementById('clock');
+
+    let teams = [];
+    let pages = [];
+    let currentPage = 0;
+    let progressStart = Date.now();
+    let autoFlipTimer = null;
+    let flipPaused = false;
+
+    function paginate(list, size) {
+      const out = [];
+      for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
+      return out.length ? out : [[]];
+    }
+
+    function renderDots() {
+      dotsEl.innerHTML = pages.map((_, i) =>
+        `<span class="dot ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})" style="cursor:pointer;"></span>`
+      ).join('');
+    }
+
+    function renderPage(idx) {
+      const page = pages[idx] || [];
+      rowsEl.innerHTML = page.map((t, i) => {
+        const rank = idx * PAGE_SIZE + i + 1;
+        const topCls = rank === 1 ? 'top-1' : rank === 2 ? 'top-2' : rank === 3 ? 'top-3' : '';
+        const timeStr = t.totalTimeStr || fmtTime(t.totalTimeSec);
+        const paceStr = fmtPace(t.avgPaceStr, t.avgPaceSec);
+        const finished = t.totalLaps >= 27;
+        return `<div class="row enter ${topCls}" style="animation-delay:${i * 60}ms">
+            <div class="col-rank">${String(rank).padStart(2, '0')}</div>
+            <div class="col-team">${finished ? '<span style="display:inline-block;margin-right:8px;padding:2px 8px;border-radius:4px;font-size:13px;background:#FFD700;color:#0B0A1F;vertical-align:middle;">完赛</span>' : ''}${t.teamName}</div>
+            <div class="col-laps">${t.leg1Laps ?? '-'}</div>
+            <div class="col-laps">${t.leg2Laps ?? '-'}</div>
+            <div class="col-laps">${t.leg3Laps ?? '-'}</div>
+            <div class="col-total-laps">${t.totalLaps || 0}</div>
+            <div class="col-time">${timeStr}</div>
+            <div class="col-pace">${paceStr}</div>
+          </div>`;
+      }).join('');
+      pageLabelEl.textContent = `第 ${idx + 1} / ${pages.length} 页`;
+      renderDots();
+    }
+
+    function sortTeams(list) {
+      return [...list].sort((a, b) => {
+        if (b.totalLaps !== a.totalLaps) return b.totalLaps - a.totalLaps;
+        return (a.totalTimeSec || 0) - (b.totalTimeSec || 0);
+      });
+    }
+
+    async function refreshData() {
+      try {
+        const list = await fetchRelayData();
+        teams = sortTeams(list);
+        pages = paginate(teams, PAGE_SIZE);
+        if (currentPage >= pages.length) currentPage = 0;
+      } catch (err) {
+        console.error('[relay] fetch failed:', err);
+      }
+    }
+
+    function tick() {
+      renderPage(currentPage);
+      currentPage = (currentPage + 1) % pages.length;
+    }
+
+    function updateProgress() {
+      const pct = Math.min(100, ((Date.now() - progressStart) / INTERVAL_MS) * 100);
+      progressEl.style.width = pct + '%';
+      requestAnimationFrame(updateProgress);
+    }
+
+    function updateClock() { clockEl.textContent = fmtClock(new Date()); }
+
+    function toggleFlip() {
+      if (isMobile) return;
+      const hint = document.getElementById('flipHint');
+      flipPaused = !flipPaused;
+      if (flipPaused) {
+        if (autoFlipTimer) { clearInterval(autoFlipTimer); autoFlipTimer = null; }
+        hint.textContent = '⏸ 已暂停 · 点击继续刷新';
+      } else {
+        autoFlipTimer = setInterval(async () => {
+          if (currentPage === 0) await refreshData();
+          progressStart = Date.now();
+          tick();
+        }, INTERVAL_MS);
+        hint.textContent = '每 ' + (INTERVAL_MS/1000) + ' 秒自动翻页 · 点击暂停';
+      }
+    }
+
+    function goToPage(idx) {
+      if (idx < 0 || idx >= pages.length) return;
+      currentPage = idx;
+      renderPage(currentPage);
+      progressStart = Date.now();
+      if (!isMobile) currentPage = (currentPage + 1) % pages.length;
+    }
+
+    window.addEventListener('resize', () => {
+      const newSize = (window.innerWidth <= 768) ? 5 : 8;
+      if (newSize !== PAGE_SIZE) {
+        PAGE_SIZE = newSize;
+        pages = paginate(teams, PAGE_SIZE);
+        if (currentPage >= pages.length) currentPage = 0;
+        renderPage(currentPage);
+        progressStart = Date.now();
+      }
+    });
+
+    // ========= Init =========
+    document.getElementById('flipHint').textContent = isMobile ? '点击页码切换页面' : '每 ' + (INTERVAL_MS/1000) + ' 秒自动翻页 · 点击暂停';
+
+    (async function init() {
+      updateClock();
+      setInterval(updateClock, 1000);
+      updateProgress();
+
+      await refreshData();
+      tick();
+
+      if (!isMobile) {
+        autoFlipTimer = setInterval(async () => {
+          if (currentPage === 0) await refreshData();
+          progressStart = Date.now();
+          tick();
+        }, INTERVAL_MS);
+      }
+    })();
+  </script>
+</body>
+</html>
